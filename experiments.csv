@@ -1,0 +1,2 @@
+date,name,description,cv_mean,cv_std,train_mean
+2026-10-02T15:25:56,gender_baseline,"female=1, male=0",0.7868,0.0257,0.7868
