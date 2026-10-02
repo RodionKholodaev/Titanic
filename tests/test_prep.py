@@ -1,6 +1,7 @@
+import pandas as pd
 import pytest
 
-from src.prep import build, extract_title, load
+from src.prep import GroupSurvival, build, extract_title, load
 
 
 @pytest.fixture(scope="module")
@@ -51,3 +52,23 @@ def test_ticket_freq_uses_full(built):
     train = full[~full["is_test"]]
     train_freq = train.groupby("Ticket")["Ticket"].transform("count")
     assert (train["TicketFreq"] > train_freq).any()
+
+
+def test_new_features(built):
+    X_train, *_ = built
+    assert {"HasGroup", "Ticket", "Sex_Pclass_female_3", "Sex_Pclass_male_1"} <= set(X_train.columns)
+
+
+def test_group_survival_leave_one_out():
+    X = pd.DataFrame({"Ticket": ["A", "A", "A", "B"]}, index=[0, 1, 2, 3])
+    y = pd.Series([1, 1, 0, 1])
+    gs = GroupSurvival().fit(X, y).transform(X)["GroupSurvival"]
+    assert gs.tolist() == [0.5, 0.5, 1.0, 0.5]  # своя метка не учитывается, B один -> 0.5
+
+
+def test_group_survival_unseen_rows():
+    fit_X = pd.DataFrame({"Ticket": ["A", "A"]}, index=[0, 1])
+    new_X = pd.DataFrame({"Ticket": ["A", "C"]}, index=[10, 11])
+    out = GroupSurvival().fit(fit_X, pd.Series([1, 1])).transform(new_X)
+    assert out["GroupSurvival"].tolist() == [1.0, 0.5]  # чужие строки: обычное среднее по fit
+    assert "Ticket" not in out

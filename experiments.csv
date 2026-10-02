@@ -1,3 +1,8 @@
 date,name,description,cv_mean,cv_std,train_mean
 2026-10-02T15:25:56,gender_baseline,"female=1, male=0",0.7868,0.0257,0.7868
 2026-10-02T15:26:41,gender_baseline,"female=1, male=0",0.7868,0.0257,0.7868
+2026-10-02T18:32:55,logreg,"StandardScaler + LogisticRegression, базовые признаки",0.8222,0.0251,0.8378
+2026-10-02T18:33:42,rf,"RF 500 деревьев, max_depth=6, базовые признаки",0.831,0.0205,0.8835
+2026-10-02T18:45:42,logreg,"StandardScaler + LogisticRegression, + Sex_Pclass, HasGroup, GroupSurvival",0.8364,0.0239,0.8569
+2026-10-02T18:46:29,rf,"RF 500 деревьев, max_depth=6, + Sex_Pclass, HasGroup, GroupSurvival",0.8357,0.0218,0.8924
+2026-10-02T18:53:14,logreg,"StandardScaler + LogisticRegression, + Sex_Pclass, HasGroup, GroupSurvival",0.8364,0.0239,0.8569
