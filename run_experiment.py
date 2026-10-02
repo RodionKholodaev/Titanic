@@ -1,8 +1,8 @@
 import numpy as np
-import pandas as pd
 from sklearn.base import BaseEstimator, ClassifierMixin
 
 from src.cv import evaluate, log_experiment
+from src.prep import build
 
 
 class GenderBaseline(ClassifierMixin, BaseEstimator):
@@ -18,8 +18,7 @@ class GenderBaseline(ClassifierMixin, BaseEstimator):
 
 
 if __name__ == "__main__":
-    train = pd.read_csv("data/train.csv")
-    X, y = train.drop(columns="Survived"), train["Survived"]
+    X, y, _, _ = build()
     result = evaluate(GenderBaseline(), X, y)
     print({k: round(float(v), 4) for k, v in result.items()})
     log_experiment("gender_baseline", "female=1, male=0", result)
